@@ -84,6 +84,19 @@ app.get('/galerie', (req, res) => {
   }
 });
 
+app.get('/galerie/:id', (req, res) => {
+  console.log("Gallery data request - výběr");
+  console.log(req.params.id)
+  const requestedId = req.params.id
+
+  // Ensure that the gallery data is available
+  if (galleryData[requestedId].galleryData && galleryData[requestedId].galleryData.length > 0) {
+    res.json({ data: galleryData[requestedId] });
+  } else {
+    res.status(404).json({ error: "Gallery data not found" });
+  }
+});
+
 
 app.get('/quote', (req, res) => {
   // Log the incoming request ID
