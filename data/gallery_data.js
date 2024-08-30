@@ -1,4 +1,4 @@
-export const gallery = [{
+const galleryData = [{
     galleryName:'Život s asistencí',
     galleryPicture:'../gallery/gallery-social.jpg',
     galleryData:[
@@ -616,3 +616,4 @@ export const gallery = [{
     ]
 }];
 
+export default galleryData

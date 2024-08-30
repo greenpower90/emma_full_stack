@@ -13,6 +13,7 @@ import bodyParser from "body-parser"
 import { fileURLToPath } from 'url';
 
 import { overviews } from "./data/overviews-data.js"
+import  galleryData  from "./data/gallery_data.js"
 
 // Define __dirname and __filename in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -22,13 +23,22 @@ const __dirname = path.dirname(__filename);
 
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow requests from this origin
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify allowed HTTP methods
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+}));
+
+
 app.use(express.static('public'))
 app.use(bodyParser.json());
 
 // Middleware to parse incoming JSON requests
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: 'http://localhost:3000' }));
+
+
 
 // API Route to handle GET request
 app.get('/', (req, res) => {
@@ -51,6 +61,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/random-quote', (req, res) => {
+  console.log('random quoute requested')
   const randomQuoteIndex = Math.floor(Math.random()*quotes.length)
   const quotesQty = quotes.length
 
@@ -60,6 +71,19 @@ app.get('/random-quote', (req, res) => {
   }
   res.json({ data });
 });
+
+
+app.get('/galerie', (req, res) => {
+  console.log("Gallery data request");
+
+  // Ensure that the gallery data is available
+  if (galleryData && galleryData.length > 0) {
+    res.json({ data: galleryData });
+  } else {
+    res.status(404).json({ error: "Gallery data not found" });
+  }
+});
+
 
 app.get('/quote', (req, res) => {
   // Log the incoming request ID
@@ -85,6 +109,8 @@ app.get('/quote', (req, res) => {
     res.status(404).json({ error: "Quote not found" });
   }
 });
+
+
 
 // API Route to handle GET request
 app.get('/about', (req, res) => {
